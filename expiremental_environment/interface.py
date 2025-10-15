@@ -115,7 +115,8 @@ class DictionnaireApp:
         self.start_time = None
 
 
-# modifier pour accepter fichier dictionaire
+# modifier pour accepter fichier dictionaire en argument
+
 
 
 if __name__ == "__main__":
