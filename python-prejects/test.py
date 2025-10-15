@@ -114,6 +114,10 @@ class DictionnaireApp:
         # Stop le chrono
         self.start_time = None
 
+
+# modifier pour accepter fichier dictionaire
+
+
 if __name__ == "__main__":
     # Mini dictionnaire de test
     mots = [
