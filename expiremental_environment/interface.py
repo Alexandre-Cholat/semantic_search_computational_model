@@ -185,14 +185,19 @@ class DictionnaireApp:
 
 
 if __name__ == "__main__":
-    mots = [
-        "abaisser", "abandon", "abattre", "abeille", "abolir",
-        "abricot", "absence", "accident", "accorder", "acheter",
-        "acteur", "admirer", "affaire", "agacer", "aider",
-        "aimer", "ajouter", "alarme", "aller", "allumer",
-        "amener", "amour", "analyser", "animal", "année",
-        "appeler", "apporter", "apprendre", "arriver", "article"
-    ]
+    # mots = [
+    #     "abaisser", "abandon", "abattre", "abeille", "abolir",
+    #     "abricot", "absence", "accident", "accorder", "acheter",
+    #     "acteur", "admirer", "affaire", "agacer", "aider",
+    #     "aimer", "ajouter", "alarme", "aller", "allumer",
+    #     "amener", "amour", "analyser", "animal", "année",
+    #     "appeler", "apporter", "apprendre", "arriver", "article"
+    # ]
+
+    mots = []
+    with open("big_dictionary.csv", "r", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        mots = [row[0] for row in reader]
 
     root = tk.Tk()
     app = DictionnaireApp(root, mots)
