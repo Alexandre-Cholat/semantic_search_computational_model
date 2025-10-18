@@ -57,7 +57,7 @@ class DictionnaireApp:
 
         # Create new CSV file for this run
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{self.participant_number}_{timestamp}.csv"
+        filename = f"p{self.participant_number}_at_{timestamp}.csv"
         self.csv_file = open(filename, "w", newline="", encoding="utf-8")
         self.csv_writer = csv.writer(self.csv_file)
         # Write header if needed
