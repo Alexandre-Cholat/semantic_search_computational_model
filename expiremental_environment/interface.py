@@ -63,8 +63,16 @@ class DictionnaireApp:
         self.label_instruction = tk.Label(self.root, text="", font=("Helvetica", 24, "bold"))
         self.label_instruction.pack(pady=10)
 
-        # Current dictionary word
-        self.label = tk.Label(self.root, text=self.mots[self.index], font=("Helvetica", 28))
+        # Center first letter by adding left padding
+        from tkinter import font as tkFont
+        screen_width = 650  # matches self.root.geometry
+        word = self.mots[self.index]
+        label_font = tkFont.Font(family="Helvetica", size=28)
+        # Measure width of first letter
+        first_letter_width = label_font.measure(word[0]) if word else 0
+        # Calculate left padding so first letter is centered
+        left_pad = int(screen_width / 2 - first_letter_width / 2)
+        self.label = tk.Label(self.root, text=word, font=("Helvetica", 28), anchor="w", justify="left", padx=left_pad)
         self.label.pack(pady=30)
 
         # Navigation buttons
