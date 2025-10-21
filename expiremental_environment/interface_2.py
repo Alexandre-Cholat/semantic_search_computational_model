@@ -1,5 +1,3 @@
-# interface officielle avec un csv par participant, sauvegarde automatique dans dossier results
-
 import tkinter as tk
 import time
 import csv
@@ -7,10 +5,6 @@ import random
 from difflib import get_close_matches
 import os
 from datetime import datetime
-
-# import the upload function
-from upload_cvs_to_GCS import *
-
 
 class DictionnaireApp:
     def __init__(self, root, mots):
@@ -25,8 +19,6 @@ class DictionnaireApp:
         self.experiment_start_time = None
         self.csv_file = None
         self.csv_writer = None
-        self.last_direction = None  # 'left', 'right', or None
-        self.last_position = None  # Track last position for direction detection
 
         self.root.title("Expérience de recherche lexicale")
         self.root.geometry("650x500")
@@ -65,9 +57,7 @@ class DictionnaireApp:
 
         # Create new CSV file for this run
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        results_dir = "results"
-        os.makedirs(results_dir, exist_ok=True)
-        filename = os.path.join(results_dir, f"p{self.participant_number}_at_{timestamp}.csv")
+        filename = f"p{self.participant_number}_at_{timestamp}.csv"
         self.csv_file = open(filename, "w", newline="", encoding="utf-8")
         self.csv_writer = csv.writer(self.csv_file)
         # Write header if needed
@@ -77,8 +67,6 @@ class DictionnaireApp:
         all_targets = ["abandon", "perdu", "encadrement", "amour", "service"]
         self.target_words = random.sample(all_targets, len(all_targets))
         self.current_target_index = 0
-        self.last_direction = None
-        self.last_position = None
         self.clear_window()
         self.build_experiment_ui()
 
@@ -87,16 +75,8 @@ class DictionnaireApp:
         self.label_instruction = tk.Label(self.root, text="", font=("Helvetica", 24, "bold"))
         self.label_instruction.pack(pady=10)
 
-        # Center first letter by adding left padding
-        from tkinter import font as tkFont
-        screen_width = 650  # matches self.root.geometry
-        word = self.mots[self.index]
-        label_font = tkFont.Font(family="Helvetica", size=28)
-        # Measure width of first letter
-        first_letter_width = label_font.measure(word[0]) if word else 0
-        # Calculate left padding so first letter is centered
-        left_pad = int(screen_width / 2 - first_letter_width / 2)
-        self.label = tk.Label(self.root, text=word, font=("Helvetica", 28), anchor="w", justify="left", padx=left_pad)
+        # Current dictionary word
+        self.label = tk.Label(self.root, text=self.mots[self.index], font=("Helvetica", 28))
         self.label.pack(pady=30)
 
         # Navigation buttons
@@ -147,17 +127,10 @@ class DictionnaireApp:
             self.show_end_screen()
             return
 
-        # Reset to first dictionary word when starting new target
-        self.index = 0
-        self.label.config(text=self.mots[self.index])
-        self.scroll.set(self.index)
-        
         self.target_word = self.target_words[self.current_target_index]
         # Reset experiment data for new target word
         self.current_experiment_data = []
         self.experiment_start_time = None
-        self.last_direction = None
-        self.last_position = self.index  # Set to current position
         
         # Make the instruction text larger and the word even bigger and bold
         instruction_text = f"🔍 Trouvez le mot : "
@@ -173,7 +146,6 @@ class DictionnaireApp:
 
     def prev_word(self):
         self.update_word_view_time()
-        self.detect_direction_change(-1)  # Moving left
         self.index = max(0, self.index - 1)
         self.label.config(text=self.mots[self.index])
         self.scroll.set(self.index)
@@ -181,7 +153,6 @@ class DictionnaireApp:
 
     def next_word(self):
         self.update_word_view_time()
-        self.detect_direction_change(1)  # Moving right
         self.index = min(len(self.mots) - 1, self.index + 1)
         self.label.config(text=self.mots[self.index])
         self.scroll.set(self.index)
@@ -189,41 +160,9 @@ class DictionnaireApp:
 
     def scroll_to(self, val):
         self.update_word_view_time()
-        new_index = int(val)
-        # Detect direction based on position change
-        if self.last_position is not None:
-            direction = 1 if new_index > self.last_position else -1 if new_index < self.last_position else 0
-            if direction != 0:
-                self.detect_direction_change(direction)
-        
-        self.index = new_index
+        self.index = int(val)
         self.label.config(text=self.mots[self.index])
         self.current_word_start_time = time.time()
-
-    def detect_direction_change(self, current_direction):
-        """Detect if the participant changed direction and log the position"""
-        if self.experiment_start_time is None:
-            return
-            
-        current_time = time.time()
-        direction_name = "left" if current_direction == -1 else "right"
-        
-        # Check if direction changed
-        if self.last_direction is not None and self.last_direction != direction_name:
-            # Direction changed! Log this position even if <1 second
-            target_pos = self.mots.index(self.target_word) if self.target_word in self.mots else -1
-            relative_position = self.index - target_pos
-            time_from_start = round(current_time - self.experiment_start_time, 2)
-            
-            # Add to experiment data (simple [position, time] tuple, no marker)
-            self.current_experiment_data.append([relative_position, time_from_start])
-            
-            # Update last position update time
-            self.last_position_update_time = current_time
-        
-        # Update direction and position tracking
-        self.last_direction = direction_name
-        self.last_position = self.index
 
     def update_word_view_time(self):
         """Update viewing time for current word and log position if viewed for more than 1 second"""
@@ -254,8 +193,6 @@ class DictionnaireApp:
         self.experiment_start_time = time.time()  # Start of experiment for this target word
         self.current_word_start_time = time.time()  # Start viewing current word
         self.current_experiment_data = []  # Reset data for new experiment
-        self.last_direction = None  # Reset direction tracking
-        self.last_position = self.index  # Set initial position
         self.feedback.config(text=f"⏱️ Recherche du mot « {self.target_word} » en cours...", fg="black")
 
     def stop_timer(self):
