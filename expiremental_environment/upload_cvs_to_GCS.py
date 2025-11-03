@@ -1,9 +1,6 @@
 from google.cloud import storage
 import os
 
-# Replace with your bucket name
-
-
 def upload_csvs_to_gcs(local_directory):
     bucket_name = "semantic-search-475516-experiment-data"
     storage_client = storage.Client()
