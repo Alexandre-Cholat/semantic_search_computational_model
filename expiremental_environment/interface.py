@@ -4,12 +4,8 @@ import tkinter as tk
 import time
 import csv
 import random
-from difflib import get_close_matches
 import os
 from datetime import datetime
-
-# import the upload function
-from upload_cvs_to_GCS import *
 
 
 class DictionnaireApp:
@@ -64,10 +60,10 @@ class DictionnaireApp:
             return
 
         # Create new CSV file for this run
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%H%M%S")
         results_dir = "results"
         os.makedirs(results_dir, exist_ok=True)
-        filename = os.path.join(results_dir, f"p{self.participant_number}_at_{timestamp}.csv")
+        filename = os.path.join(results_dir, f"p{self.participant_number}-{timestamp}.csv")
         self.csv_file = open(filename, "w", newline="", encoding="utf-8")
         self.csv_writer = csv.writer(self.csv_file)
         # Write header if needed
