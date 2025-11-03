@@ -15,4 +15,5 @@ def upload_csvs_to_gcs(local_directory):
             blob.upload_from_filename(os.path.join(local_directory, filename))
             print(f"Uploaded {filename} to GCS.")
 
-upload_csvs_to_gcs("path/to/your/csvs")
+upload_csvs_to_gcs("results") # specify the local directory containing CSV files
+
