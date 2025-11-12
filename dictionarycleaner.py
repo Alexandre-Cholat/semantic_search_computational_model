@@ -61,7 +61,7 @@ def insert_word(csv_file, new_word):
 #     clean_dictionary(input_file, output_file)
 
 mots = [
-    ["zombie", "zèbre", "yacht", "yoga"],
+    ["zombie", "gaspillages", "galonner", "yoga"],
     ["yaourt", "xylophone", "whisky", "wagon"],
     ["wifi", "boursouflés", "sorbier", "pays"],
     ["bourdon", "boursoufler", "cerisier", "présence"],

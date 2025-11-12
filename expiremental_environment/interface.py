@@ -70,8 +70,17 @@ class DictionnaireApp:
         self.csv_writer.writerow(["participant_number", "target_word", "target_word_pos", "position_time_pairs"])
 
         # Hardcoded target words, randomized each run
-        all_targets = ["abandon", "perdu", "encadrement", "amour", "service"]
-        self.target_words = random.sample(all_targets, len(all_targets))
+        all_targets = ["damasquinerie", "dindon", "dame", "rouillures", "récurrence", "raison",
+                       "vulvaires", "vestiaires", "voiture", "guerre", "gaspillages", "galonner"]
+        available_targets = [w for w in all_targets if w in self.mots]
+        missing_targets = [w for w in all_targets if w not in self.mots]
+        if not available_targets:
+            tk.Label(self.frame_setup, text="⚠️ Aucun des mots-cibles n'est présent dans le dictionnaire.", fg="red", font=("Helvetica", 12)).pack()
+            return
+        if missing_targets:
+            # Show a one-time notice; experiment can proceed with available targets
+            tk.Label(self.frame_setup, text=f"ℹ️ Mots absents ignorés: {', '.join(missing_targets)}", fg="orange", font=("Helvetica", 10)).pack()
+        self.target_words = random.sample(available_targets, len(available_targets))
         self.current_target_index = 0
         self.last_direction = None
         self.last_position = None
@@ -130,10 +139,13 @@ class DictionnaireApp:
         self.load_next_target()
 
     def jump_to_click(self, event):
-        # Compute the new value based on where the user clicked
-        # Works only for horizontal scale
         scale = event.widget
-        new_val = int(scale["from"]) + int((int(scale["to"]) - int(scale["from"])) * event.x / scale.winfo_width())
+        min_v = int(scale["from"]) if "from" in scale.keys() else 0
+        max_v = int(scale["to"]) if "to" in scale.keys() else len(self.mots) - 1
+        width = max(scale.winfo_width(), 1)
+        new_val = min_v + int((max_v - min_v) * event.x / width)
+        # clamp
+        new_val = max(min_v, min(max_v, new_val))
         scale.set(new_val)
         self.scroll_to(new_val)
 
@@ -189,10 +201,11 @@ class DictionnaireApp:
         # Detect direction based on position change
         if self.last_position is not None:
             direction = 1 if new_index > self.last_position else -1 if new_index < self.last_position else 0
-            if direction != 0:
-                self.detect_direction_change(direction)
-        
+        else:
+            direction = 0
         self.index = new_index
+        if direction != 0:
+            self.detect_direction_change(direction)
         self.label.config(text=self.mots[self.index])
         self.current_word_start_time = time.time()
 
@@ -317,7 +330,7 @@ if __name__ == "__main__":
     mots = []
     with open("petit_dictionaire.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
-        mots = [row[0] for row in reader]
+        mots = [row[0].strip() for row in reader if row and len(row) > 0 and row[0].strip()]
 
     root = tk.Tk()
     app = DictionnaireApp(root, mots)
