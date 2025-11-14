@@ -2,4 +2,4 @@
 Data pipeline and research interface to model human semantic search patterns
 
 
-#### Ce travail a bénéficié d'une aide de l'Etat gérée par l'Agence Nationale de la Recherche au titre du programme «Investissements d'avenir » portant la référence ANR-22-CMAS-0005
+#### This work was supported by the French government, under the management of the National Research Agency (ANR), as part of the "Investments for the Future" program with the reference ANR-22-CMAS-0005.
