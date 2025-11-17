@@ -7,6 +7,26 @@ import random
 import os
 from datetime import datetime
 
+import upload_to_supabase
+
+# from .upload_to_supabase import upload_file_to_supabase
+try:
+    # preferred when running as a package: python -m expiremental_environment.interface
+    from expiremental_environment.upload_to_supabase import upload_file_to_supabase
+except Exception:
+    try:
+        # preferred when module is imported relatively
+        from .upload_to_supabase import upload_file_to_supabase
+    except Exception:
+        try:
+            # fallback if upload_to_supabase.py is in the same directory and you run the script directly
+            import upload_to_supabase
+            upload_file_to_supabase = upload_to_supabase.upload_file_to_supabase
+        except Exception:
+            # final fallback: stub to avoid crashes — logs the path instead of uploading
+            def upload_file_to_supabase(path):
+                print(f"ALERT: upload_file_to_supabase script not implemented. Remember to upload manually. CSV path: {path}")
+
 
 class DictionnaireApp:
     def __init__(self, root, mots):
@@ -304,8 +324,16 @@ class DictionnaireApp:
     def show_end_screen(self):
         # Close the CSV file
         if self.csv_file:
+            csv_path = os.path.abspath(self.csv_file.name)  # get full path
             self.csv_file.close()
-            
+
+            # upload csv to supabase (accepts relative or absolute path)
+            try:
+                upload_to_supabase.upload_file_to_supabase(csv_path)
+            except Exception as e:
+                # safe failure: print (IDE console / terminal) and continue
+                print(f"[ERROR] upload failed: {e} — CSV kept at: {csv_path}")
+  
         self.clear_window()
         done_label = tk.Label(self.root, text="🎉 Expérience terminée !", font=("Helvetica", 24, "bold"))
         done_label.pack(pady=50)
