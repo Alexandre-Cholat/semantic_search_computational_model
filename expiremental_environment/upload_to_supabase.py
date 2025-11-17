@@ -59,6 +59,6 @@ def upload_file_to_supabase(file_path: str):
     print("Database insert result:", res)
 
     print(f"✅ Successfully uploaded and logged: {file_name}")
-
-
-# upload_file_to_supabase("results/p0-102940.csv")
+    
+# Test upload function:
+# upload_file_to_supabase("results/p99-1020211.csv")

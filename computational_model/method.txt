@@ -1,0 +1,7 @@
+Problem to Model:
+
+I'm building a computational model for semantic dictionary search. I have a large csv containing data for each participant, of searches for 12 different words. position_time_pairs is a string representation of a list of pairs, [current_position, time_stamp]. 
+Of the 12 words, there are 4 diff starting letters. The parameters we are controlling is starting letter (distance from starting point) and word frequency in speech. Each starting letter has three different words of high, med, low freq. The 4th starting letter is for model validation only, not training.
+
+Method:
+- Extract features from data
