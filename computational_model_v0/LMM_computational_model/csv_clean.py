@@ -12,6 +12,7 @@ def clean_and_normalize_data(file_path, output_path='cleaned_data.pkl'):
     
     # 1. Load Data
     # We explicitly treat position_time_pairs as a string initially to avoid parsing errors
+
     df = pd.read_csv(file_path, dtype={'position_time_pairs': str})
     
     print(f"Raw data loaded: {len(df)} trials found.")
@@ -59,36 +60,24 @@ def clean_and_normalize_data(file_path, output_path='cleaned_data.pkl'):
     # while keeping the participant_number as a column.
     df.set_index(['target_word', 'participant_number'], inplace=True)
     
-    # Sort index to ensure all trials for "dindon" are physically adjacent in memory
+    # Sort index
     df.sort_index(inplace=True)
 
     # 6. Save Data
-    # We use Pickle (.pkl) instead of CSV because CSV would force us to 
-    # turn our nice lists back into strings. Pickle preserves the Python list objects.
+    # We use Pickle to preserve the Python list objects.
     df.to_pickle(output_path)
     
     print(f"Success! Processed data saved to {output_path}")
     print("Data is grouped by target_word. Use pd.read_pickle() to load.")
     return df
 
-# --- Usage Example ---
+# --- Usage  ---
 if __name__ == "__main__":
-    # Create a dummy CSV for demonstration purposes based on your image
-    from io import StringIO
-    csv_data = """participant_number,target_word,target_word_pos,position_time_pairs
-1,rouillures,4065,"[[-4065, 3.16], [-2537, 12.21], [-2411, 14.3], [-14, 19.08], [-14, 19.08], [-128, 28.8], [-3, 32.17], [0, 35.14]]"
-1,vestiaires,4780,"[[-4780, 1.88], [-415, 5.6], [-415, 5.6], [-17, 12.28], [0, 31.9]]"
-1,dindon,1466,"[[-1466, 1.33], [2, 8.74], [0, 10.2]]"
-"""
-    # Write dummy file
-    with open('dummy_data.csv', 'w') as f:
-        f.write(csv_data)
+
+    file_path = "C:\\Users\\alexa\\OneDrive\\Documents\\tech-projects\\semantic_search_data\\semantic_search_raw_experiments.csv"
+    output_path = "C:\\Users\\alexa\\OneDrive\\Documents\\tech-projects\\semantic_search_data\\semantic_search_cleaned_data.pkl"
 
     # Run the cleaning
-    cleaned_df = clean_and_normalize_data('dummy_data.csv')
+    clean_and_normalize_data(file_path, output_path)
     
-    # Inspect a single trace to verify duplicate removal
-    # In the raw data above, 'rouillures' has two entries for time 19.08. 
-    # The output should only have one.
-    print("\n--- Verification: Trace for 'rouillures' ---")
-    print(cleaned_df.loc['rouillures']['clean_traces'].iloc[0])
+    
