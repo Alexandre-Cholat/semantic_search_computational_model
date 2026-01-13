@@ -61,19 +61,19 @@ def modele_cognitif_frequence():
     max_time = max(max(human_times), max(model_times))
     bins = np.linspace(0, max_time, 30)
     
-    plt.hist(human_times, bins=bins, alpha=0.5, label='Humains (Réel)', color='blue', edgecolor='black')
-    plt.hist(model_times, bins=bins, alpha=0.5, label='Modèle (Fréquence + Chunking)', color='red', edgecolor='black')
+    # MODIFICATION : On ajoute density=True pour les deux histogrammes
+    plt.hist(human_times, bins=bins, alpha=0.5, label='Humains (Réel)', 
+             color='blue', edgecolor='black', density=True)
+    plt.hist(model_times, bins=bins, alpha=0.5, label='Modèle (Simulé)', 
+             color='red', edgecolor='black', density=True)
     
-    plt.text(max_time*0.6, plt.gca().get_ylim()[1]*0.8, f'RMSE: {rmse:.2f}s', 
-             fontsize=14, fontweight='bold', bbox=dict(facecolor='white', alpha=0.8))
-    
-    plt.title('Modèle Cognitif UGA : Impact de la Fréquence Lexicale')
-    plt.xlabel('Temps de recherche total (s)')
-    plt.ylabel('Nb d\'essais')
+    plt.title('Modèle Cognitif : Comparaison en Densité de Probabilité')
+    plt.xlabel('Temps de recherche total (s) [VD]')
+    plt.ylabel('Densité (Probabilité)') # On change le nom de l'axe Y
     plt.legend()
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
     
-    plt.savefig(os.path.join(SCRIPT_DIR, 'comparaison_frequence.png'))
-    print(f"RMSE Final : {rmse:.2f}s")
+    plt.savefig('resultat_densite.png')
 
 if __name__ == "__main__":
     modele_cognitif_frequence()
