@@ -7,7 +7,6 @@ import random
 import os
 from datetime import datetime
 
-import upload_to_supabase
 
 # from .upload_to_supabase import upload_file_to_supabase
 try:
@@ -329,7 +328,7 @@ class DictionnaireApp:
 
             # upload csv to supabase (accepts relative or absolute path)
             try:
-                upload_to_supabase.upload_file_to_supabase(csv_path)
+                upload_file_to_supabase(csv_path)
             except Exception as e:
                 # safe failure: print (IDE console / terminal) and continue
                 print(f"[ERROR] upload failed: {e} — CSV kept at: {csv_path}")
