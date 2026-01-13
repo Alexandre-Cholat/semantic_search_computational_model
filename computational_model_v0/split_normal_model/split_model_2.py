@@ -18,14 +18,14 @@ def calculate_parameters(frequency, starting_pos):
     base_mean = close_word_base_mean + (starting_pos / max_word_dist) * pos_multiplier
     # 1. Base configurations based on Frequency
     if frequency.lower() == 'high':
-        base_std = 3
+        base_std = 5
         skew = 0.8
     elif frequency.lower() == 'med':
         base_std = 8
         skew = 0.7
     elif frequency.lower() == 'low':
-        base_std = 12
-        skew = 0.1
+        base_std = 11
+        skew = 0.5
     else:
         raise ValueError("Frequency must be 'high', 'med', or 'low'")
 
