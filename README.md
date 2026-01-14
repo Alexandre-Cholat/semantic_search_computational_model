@@ -1,10 +1,12 @@
 # semantic_search_computational_model
 
-Data pipeline and research interface to model human semantic search patterns. This repository contains code to run interactive experiments, collect interaction data, and use that data to analyze and train computational models of semantic search behavior.
+Computational modeling and data pipeline for studying lexical search patterns in a dictionary context. This repository contains an interactive interface to collect behavioral data and a simulation framework to evaluate computational models of human search strategies.
 
 ## Key ideas
 - Provide an interactive environment to collect participant interaction data.
-- Provide a pipeline to process collected data for analysis and model training.
+- Provide a pipeline to process collected data.
+- Calibrate models using human baseline data.
+- Utilize variables like word frequency (lexical retrieval cost) and polarization (alphabetical distance/position) to predict total search time.
 - Make it easy for contributors to run experiments locally and help improve the model.
 
 ## How it works (high level)
