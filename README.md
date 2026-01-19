@@ -1,6 +1,6 @@
 # semantic_search_computational_model
 
-Computational modeling and data pipeline for studying lexical search patterns in a dictionary context. This repository contains an interactive interface to collect behavioral data and a simulation framework to evaluate computational models of human search strategies.
+Computational modeling and data pipeline for studying lexical search patterns in a dictionary context. This repository contains an interactive interface to collect behavioral data and a simulation framework to evaluate computational models of human search strategies. A detailled description of the model, data collection, and methodology is available in the "Rapport Modélisation Computationnelle" document.
 
 ## Key ideas
 - Provide an interactive environment to collect participant interaction data.
@@ -29,7 +29,7 @@ Minimal steps to get started:
 5. Run the interactive/demo script: python experimental_environment/interface.py
 
 
-The data collected from these runs will be used to train and improve the computational model. Data is inherently anonymized before being used for research or model training; by trying the experience you help improve the model. If you have concerns or want your data excluded, please open an issue or contact the maintainers. By participating you consent to the use of your interaction data for research and model training purposes.
+The data collected from these runs will be used to train and improve the computational model. Data is inherently anonymized before being used for research or model training; by trying the experience you help improve the model. By participating you consent to the use of your interaction data for research and model training purposes.
 
 ## Funding and Acknowledgements
 This work was supported by the French government, under the management of the National Research Agency (ANR), as part of the "Investments for the Future" program with the reference ANR-22-CMAS-0005.
